@@ -1,0 +1,24 @@
+sensor:
+  - platform: time_date
+    display_options:
+      - 'time'
+      - 'date'
+
+  - platform: template
+    sensors:
+      friendly_date:
+        friendly_name: "Date"
+        icon_template: mdi:calendar
+        value_template: >
+          {{ as_timestamp(strptime(states('sensor.date'), '%Y-%m-%d')) | timestamp_custom("%a, %b %d") }}
+      friendly_time:
+        friendly_name: "Time"
+        icon_template: mdi:clock
+        value_template: >
+          {{ as_timestamp(now()) | timestamp_custom("%I:%M %p") }}
+
+  - platform: command_line
+    name: CPU Temperature
+    command: "cat /sys/class/thermal/thermal_zone0/temp"
+    unit_of_measurement: "°C"
+    value_template: "{{ value | multiply(0.001) | round(1) }}"

@@ -1,0 +1,14 @@
+# Secrets
+secrets.yaml
+known_devices.yaml
+SERVICE_ACCOUNT.json
+
+# Logs and DBs
+*.db
+*.log
+home-assistant.log.*
+home-assistant_v2.db*
+
+# Settings
+.storage
+.HA_VERSION

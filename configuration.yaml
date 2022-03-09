@@ -1,0 +1,74 @@
+homeassistant:
+  external_url: !secret external_url
+  internal_url: !secret internal_url
+  customize: !include customize.yaml
+  packages: !include_dir_named packages/
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  elevation: 0
+  unit_system: imperial
+  time_zone: !secret time_zone
+
+http:
+  use_x_forwarded_for: true
+  cors_allowed_origins:
+    - https://cast.home-assistant.io
+  trusted_proxies:
+    - !secret docker_host
+    - !secret docker_vlan_host
+    - !secret network_host
+    - 127.0.0.1
+    - "::1"
+        
+      
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+# Custom enablements
+
+wake_on_lan:
+
+google_assistant:
+  project_id: !secret google_project_id
+  service_account: !include SERVICE_ACCOUNT.json
+  report_state: true
+  expose_by_default: true
+  exposed_domains:
+    - switch
+    - light
+  entity_config:
+    switch.bedroom_fan:
+      name: "Box Fan"
+      aliases:
+        - "Bedroom Fan"
+
+nest:
+  client_id: !secret nest_client_id
+  client_secret: !secret nest_client_secret
+  project_id: !secret nest_project_id
+
+frontend:
+  extra_module_url:
+    - /hacsfiles/lovelace-card-mod/card-mod.js
+
+lovelace:
+  mode: yaml
+  resources: !include /config/resources.yaml
+  dashboards:
+    nest-hub:
+      mode: yaml
+      filename: nest-hub.yaml
+      title: "Main Dashboard"
+      icon: mdi:view-dashboard
+      show_in_sidebar: true
+      require_admin: false
+
+automation ui: !include automations.yaml
+
+mqtt:
+  discovery: false
+  broker: !secret mqtt_broker

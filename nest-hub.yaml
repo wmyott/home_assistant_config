@@ -1,0 +1,14 @@
+Title: Nest Hub Dashboard
+
+kiosk_mode:
+  kiosk: true
+
+decluttering_templates:
+  !include_dir_merge_named lovelace/decluttering_templates/
+
+button_card_templates: !include_dir_merge_named lovelace/card_templates/
+
+views:
+  - !include lovelace/views/view_hub.yaml
+  # Hidden detail view
+  - !include lovelace/views/view_thermostat.yaml

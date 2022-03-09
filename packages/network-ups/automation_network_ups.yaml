@@ -1,0 +1,24 @@
+automation:
+- alias: notification_network_ups_drawing_from_battery
+  description: 'Send a notification when network UPS is drawing from battery'
+  trigger:
+  - type: battery_level
+    platform: device
+    device_id: 062f50da56902e7e31c839acfbfcd58e
+    entity_id: sensor.network_ups_battery_charge
+    domain: sensor
+    below: 100
+    above: 90
+  condition: []
+  action:
+  - device_id: a44306519f7aff3c42d86834f59fa869
+    domain: mobile_app
+    type: notify
+    title: Power Outage
+    message: Network UPS is drawing from battery
+  - service: persistent_notification.create
+    data:
+      title: Power Outage
+      message: Network UPS is drawing from battery
+      notification_id: '10'
+  mode: single

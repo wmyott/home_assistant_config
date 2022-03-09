@@ -1,0 +1,20 @@
+title: Temperature
+path: thermostat-hub
+icon: mdi:thermometer
+visible: false
+panel: true
+cards:
+  - type: vertical-stack
+    cards:
+      # Header
+      - type: custom:button-card
+        template: card_header
+        variables:
+          card_header_title: Air Control
+          card_header_navigate_path: /nest-hub/hub
+          card_header_back_button: true
+
+      # View
+      - type: thermostat
+        entity: climate.thermostat
+        name: " "

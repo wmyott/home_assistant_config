@@ -1,0 +1,19 @@
+automation:
+  - alias: Tesla not plugged in
+    description: "Send a notification when the tesla isn't plugged in at night"
+    trigger:
+    - platform: time
+      at: '20:00'
+    condition:
+    - condition: state
+      entity_id: binary_sensor.tesla_plugged_in
+      state: 'off'
+    - condition: state
+      entity_id: sensor.tesla_geofence
+      state: 'Home'
+    action:
+    - service: notify.mobile_app_pixel_6_pro
+      data:
+        title: Tesla not plugged in
+        message: Tesla not plugged in
+    mode: single 

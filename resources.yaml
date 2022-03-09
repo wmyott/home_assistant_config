@@ -1,0 +1,11 @@
+- url: /hacsfiles/button-card/button-card.js
+  type: module
+
+- url: /hacsfiles/decluttering-card/decluttering-card.js
+  type: module
+
+- url: /hacsfiles/lovelace-layout-card/layout-card.js
+  type: module
+
+- url: /hacsfiles/kiosk-mode/kiosk-mode.js
+  type: module

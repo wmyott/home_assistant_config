@@ -1,0 +1,53 @@
+sensor:
+  - platform: rest
+    name: awair_kitchen_sensors
+    resource: http://10.10.10.20/air-data/latest
+    json_attributes:
+      - timestamp
+      - score
+      - dew_point
+      - temp
+      - humid
+      - abs_humid
+      - co2
+      - co2_est
+      - voc
+      - voc_baseline
+      - voc_h2_raw
+      - voc_ethanol_raw
+      - pm25
+      - pm10_est
+    value_template: 'OK'
+  - platform: template
+    sensors:
+      awair_kitchen_score:
+        friendly_name: "Quality Score"
+        value_template: '{{ states.sensor.awair_kitchen_sensors.attributes["score"] }}'
+        unit_of_measurement: '%'
+      awair_kitchen_temp:
+        friendly_name: "Temperature"
+        value_template: >-
+          {% set t = states.sensor.awair_kitchen_sensors.attributes["temp"] | float %}
+          {{ ((t)*9/5)+32 }}
+        device_class: temperature
+        unit_of_measurement: '°F'
+      awair_kitchen_humid:
+        friendly_name: "Relative Humidity"
+        value_template: '{{ states.sensor.awair_kitchen_sensors.attributes["humid"] }}'
+        device_class: humidity
+        unit_of_measurement: '%'
+      awair_kitchen_co2:
+        friendly_name: "Carbon Dioxide"
+        value_template: '{{ states.sensor.awair_kitchen_sensors.attributes["co2"] }}'
+        unit_of_measurement: 'ppm'
+        device_class: carbon_dioxide
+      awair_kitchen_voc:
+        friendly_name: "Total VOC"
+        value_template: '{{ states.sensor.awair_kitchen_sensors.attributes["voc"] }}'
+        unit_of_measurement: 'ppb'
+        device_class: volatile_organic_compounds
+      awair_kitchen_pm25:
+        friendly_name: "Particulate Matter 2.5"
+        value_template: '{{ states.sensor.awair_kitchen_sensors.attributes["pm25"] }}'
+        unit_of_measurement: 'μg/m³'
+        device_class: pm25

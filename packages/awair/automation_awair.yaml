@@ -1,0 +1,39 @@
+automation:
+- id: 'awair_fan_trigger'
+  alias: Turn on Nest Fan When CO2 is High
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.awair_kitchen_co2
+    above: '1000'
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  condition:
+  - condition: state
+    entity_id: climate.thermostat
+    state: idle
+    attribute: hvac_action
+  - condition: state
+    entity_id: climate.thermostat
+    state: 'off'
+    attribute: fan_mode
+  action:
+  - service: climate.set_fan_mode
+    data:
+      fan_mode: 'on'
+    target:
+      entity_id: climate.thermostat
+  - delay:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  - service: climate.set_fan_mode
+    data:
+      fan_mode: 'off'
+    target:
+      entity_id: climate.thermostat
+  mode: single
+

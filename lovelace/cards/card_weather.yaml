@@ -1,0 +1,9 @@
+type: weather-forecast
+entity: weather.openweathermap
+name: " "
+style: |
+  ha-card.type-weather-forecast {
+    border-radius: 21px;
+  }
+tap_action: none
+hold_action: none

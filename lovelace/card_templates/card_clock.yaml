@@ -1,0 +1,26 @@
+card_clock:
+    entity: ""
+    styles:
+      card:
+        - padding: 4%
+        - font-size: 36px
+        - border-radius: 21px
+        - color: var(--primary-text-color)
+      grid:
+        - grid-template-areas: '"time date"'
+        - grid-template-columns: 2fr
+        - grid-template-rows: 1fr
+      custom_fields:
+        time:
+          - justify-self: start
+        date:
+          - justify-self: end
+          - font-size: 28px
+          - color: var(--secondary-text-color)
+    custom_fields:
+      time: >
+        [[[ return states['sensor.friendly_time'].state ]]]
+      date: >
+        [[[ return states['sensor.friendly_date'].state ]]]
+    tap_action: none
+    hold_action: none 
