@@ -46,11 +46,6 @@ google_assistant:
       aliases:
         - "Bedroom Fan"
 
-nest:
-  client_id: !secret nest_client_id
-  client_secret: !secret nest_client_secret
-  project_id: !secret nest_project_id
-
 frontend:
   extra_module_url:
     - /hacsfiles/lovelace-card-mod/card-mod.js

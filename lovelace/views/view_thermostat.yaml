@@ -16,5 +16,5 @@ cards:
 
       # View
       - type: thermostat
-        entity: climate.thermostat
+        entity: climate.hallway_thermostat
         name: " "

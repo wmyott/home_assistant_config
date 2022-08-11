@@ -1,0 +1,6 @@
+group:
+  family:
+    name: 'Hannah and Will'
+    entities:
+      - person.will
+      - person.hannah

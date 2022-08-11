@@ -31,7 +31,7 @@ cards:
       - type: vertical-stack
         cards:
           - type: custom:button-card
-            entity: "sensor.thermostat_temperature"
+            entity: "sensor.hallway_thermostat_temperature"
             tap_action: 
               action: navigate
               navigation_path: /nest-hub/thermostat-hub
@@ -41,7 +41,7 @@ cards:
             name: 'Indoor Temp'
 
           - type: thermostat
-            entity: climate.thermostat
+            entity: climate.hallway_thermostat
             name: " "
 
       # Right Column

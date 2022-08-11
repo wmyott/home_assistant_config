@@ -7,4 +7,348 @@
       player: media_player.kitchen_display
       view: hub
       dashboard: nest-hub
-
+- id: '1658960526013'
+  alias: Tesla Driving Alert
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.tesla_shift_state
+    to: D
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  condition:
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: sensor.tesla_geofence
+      state: Home
+  - condition: state
+    entity_id: person.will
+    state: Home
+  action:
+  - device_id: a44306519f7aff3c42d86834f59fa869
+    domain: mobile_app
+    type: notify
+    message: Tesla Started Driving
+  mode: single
+- id: '1660007518419'
+  alias: Washer Started
+  description: Send notification, set input state when the washer is started
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.washer_plug_electric_consumption_w
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+    above: '1'
+  condition:
+  - condition: state
+    entity_id: input_select.washing_machine_status
+    state: 'Off'
+  action:
+  - service: notify.mobile_app_pixel_6_pro
+    data:
+      message: Washing Machine has started
+  - service: input_select.select_option
+    data:
+      option: Running
+    target:
+      entity_id: input_select.washing_machine_status
+  mode: single
+- id: '1660007658989'
+  alias: Washer Finished
+  description: Send notification, set input status when washing machine is done
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.washer_plug_electric_consumption_w
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+    below: '0.1'
+  condition:
+  - condition: state
+    entity_id: input_select.washing_machine_status
+    state: Running
+  action:
+  - service: notify.mobile_app_pixel_6_pro
+    data:
+      message: Washing machine is done
+  - service: tts.google_translate_say
+    data:
+      entity_id: media_player.kitchen_display
+      message: Washing Machine is finished
+      cache: true
+  - service: input_select.select_option
+    data:
+      option: 'Off'
+    target:
+      entity_id: input_select.washing_machine_status
+  mode: single
+- id: '1660014904034'
+  alias: Dryer Started
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.dryer_plug_electric_consumption_w
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+    above: '1'
+  condition:
+  - condition: state
+    entity_id: input_select.dryer_state
+    state: 'Off'
+  action:
+  - service: notify.mobile_app_pixel_6_pro
+    data:
+      message: Dryer started
+  - service: input_select.select_option
+    data:
+      option: Running
+    target:
+      entity_id: input_select.dryer_state
+  mode: single
+- id: '1660015078754'
+  alias: Dryer Finished
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.dryer_plug_electric_consumption_w
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+    below: '1'
+  condition:
+  - condition: state
+    entity_id: input_select.dryer_state
+    state: Running
+  action:
+  - service: notify.mobile_app_pixel_6_pro
+    data:
+      message: Dryer finished
+  - service: input_select.select_option
+    data:
+      option: 'Off'
+    target:
+      entity_id: input_select.dryer_state
+  - service: tts.google_translate_say
+    data:
+      entity_id: media_player.kitchen_display
+      message: Dryer is finished
+      cache: true
+  mode: single
+- id: '1660059642462'
+  alias: Interior Camera - Enable Recording When Away
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - group.family
+    to: not_home
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+    from: home
+  condition:
+  - condition: state
+    entity_id: group.family
+    state: not_home
+  action:
+  - device_id: b12ffd06f62c5c580df9f7742a478f7a
+    domain: select
+    entity_id: select.entrance_camera_recording_mode
+    type: select_option
+    option: Detections
+  - service: notify.mobile_app_pixel_6_pro
+    data:
+      message: Interior camera recording enabled
+  mode: single
+- id: '1660059737430'
+  alias: Interior Camera - Disable Recording When Home
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - person.will
+    from: away
+    to: home
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  - platform: state
+    entity_id:
+    - person.hannah
+    from: away
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+    to: home
+  condition:
+  - condition: state
+    entity_id: person.will
+    state: home
+  - condition: state
+    entity_id: person.hannah
+    state: home
+  action:
+  - device_id: b12ffd06f62c5c580df9f7742a478f7a
+    domain: select
+    entity_id: select.entrance_camera_recording_mode
+    type: select_option
+    option: Never
+  - service: notify.mobile_app_pixel_6_pro
+    data:
+      message: Interior recording disabled
+  mode: single
+- id: '1660246799938'
+  alias: Test Motion-activated Light
+  description: ''
+  use_blueprint:
+    path: homeassistant/motion_light.yaml
+    input:
+      motion_entity: binary_sensor.master_bedroom_q_sensor_home_security_motion_detection
+      light_target:
+        entity_id: light.will_s_light
+- id: '1660255892253'
+  alias: Bedroom Occupied
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.master_bedroom_q_sensor_home_security_motion_detection
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: group.family
+    state: home
+  action:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.bedroom_occupied
+  mode: single
+- id: '1660256346146'
+  alias: Living Room Occupied
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.living_room_motion
+    to: 'on'
+  - platform: state
+    entity_id:
+    - media_player.living_room_chromecast_2
+    to: 'on'
+  - platform: state
+    entity_id:
+    - media_player.living_room_tv
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: group.family
+    state: home
+  action:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.living_room_occupied
+  mode: single
+- id: '1660256982892'
+  alias: Bedroom Unoccupied
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.bedroom_motion
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  condition:
+  - condition: state
+    entity_id: input_boolean.bedroom_occupied
+    state: 'on'
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.bedroom_occupied
+  mode: single
+- id: '1660257528353'
+  alias: Will Bedtime
+  description: ''
+  trigger:
+  - type: plugged_in
+    platform: device
+    device_id: a44306519f7aff3c42d86834f59fa869
+    entity_id: binary_sensor.pixel_6_pro_is_charging
+    domain: binary_sensor
+  condition:
+  - condition: state
+    entity_id: group.family
+    state: home
+  - condition: time
+    before: 03:00:00
+    after: '22:00:00'
+    weekday: []
+  action:
+  - service: switch.turn_on
+    data: {}
+    target:
+      entity_id: switch.bedroom_fan
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.bedtime_will
+  mode: single
+- id: '1660257688056'
+  alias: Will Morning
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.pixel_6_pro_battery_state
+    to: discharging
+  condition:
+  - condition: state
+    entity_id: group.family
+    state: home
+  - condition: time
+    before: '12:00:00'
+    after: 05:30:00
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.bedtime_will
+  - service: switch.turn_off
+    data: {}
+    target:
+      entity_id: switch.bedroom_fan
+  mode: single
+- id: '1660259453208'
+  alias: Test delay
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.bedroom_motion
+    to: 'on'
+  condition: []
+  action:
+  - service: switch.turn_on
+    data: {}
+    target:
+      entity_id: switch.bedroom_fan
+  mode: single

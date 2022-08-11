@@ -43,6 +43,16 @@ sensor:
         value_template: >
           {{ (states('sensor.tesla_elevation') | float * 3.2808 ) | round(2) }}
 
+      tesla_garage_temperature:
+        unique_id: "tesla_garage_temperature"
+        friendly_name: Garage Temperature (Tesla)
+        device_class: temperature
+        availability_template: >
+          {{ is_state('sensor.tesla_geofence', 'Home') }}
+        unit_of_measurement: °F
+        value_template: >
+         {{ states('sensor.tesla_outside_temp') }}
+
   - platform: mqtt
     name: tesla_display_name
     state_topic: "teslamate/cars/1/display_name"
@@ -239,3 +249,4 @@ sensor:
     state_topic: "teslamate/cars/1/time_to_full_charge"
     unit_of_measurement: h
     icon: mdi:clock-outline
+

@@ -12,11 +12,11 @@ automation:
       seconds: 0
   condition:
   - condition: state
-    entity_id: climate.thermostat
+    entity_id: climate.hallway_thermostat
     state: idle
     attribute: hvac_action
   - condition: state
-    entity_id: climate.thermostat
+    entity_id: climate.hallway_thermostat
     state: 'off'
     attribute: fan_mode
   action:
@@ -24,7 +24,7 @@ automation:
     data:
       fan_mode: 'on'
     target:
-      entity_id: climate.thermostat
+      entity_id: climate.hallway_thermostat
   - delay:
       hours: 0
       minutes: 30
@@ -34,6 +34,6 @@ automation:
     data:
       fan_mode: 'off'
     target:
-      entity_id: climate.thermostat
+      entity_id: climate.hallway_thermostat
   mode: single
 

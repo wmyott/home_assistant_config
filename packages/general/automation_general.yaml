@@ -11,7 +11,7 @@ automation:
       - service: frontend.set_theme
         data_template:
           name: none
-          mode: "light"
+          mode: light
 
     # IF: { sun.sun goes under horizon } THEN: { set to dark mode }
   - alias: day_to_night_theme
@@ -39,7 +39,7 @@ automation:
       - service: frontend.set_theme
         data:
           name: none
-          mode: dark
+          mode: light
 
   - id: schedule_night_lights_on
     alias: Turn on Nightlights
@@ -53,10 +53,6 @@ automation:
       device_id: f7d7595ce1ae44dc5b12989e2372513c
       entity_id: switch.living_room_night_light
       domain: switch
-    - type: turn_on
-      device_id: ea62aa6fa83bf08f354695feeee63097
-      entity_id: switch.master_bedroom_night_light
-      domain: switch
     mode: single
   - id: schedule_night_lights_off
     alias: Turn Off Nightlights
@@ -66,10 +62,6 @@ automation:
       at: 06:30:00
     condition: []
     action:
-    - type: turn_off
-      device_id: ea62aa6fa83bf08f354695feeee63097
-      entity_id: switch.master_bedroom_night_light
-      domain: switch
     - type: turn_off
       device_id: f7d7595ce1ae44dc5b12989e2372513c
       entity_id: switch.living_room_night_light
