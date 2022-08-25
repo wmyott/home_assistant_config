@@ -50,9 +50,6 @@
     entity_id: input_select.washing_machine_status
     state: 'Off'
   action:
-  - service: notify.mobile_app_pixel_6_pro
-    data:
-      message: Washing Machine has started
   - service: input_select.select_option
     data:
       option: Running
@@ -105,9 +102,6 @@
     entity_id: input_select.dryer_state
     state: 'Off'
   action:
-  - service: notify.mobile_app_pixel_6_pro
-    data:
-      message: Dryer started
   - service: input_select.select_option
     data:
       option: Running
@@ -177,28 +171,16 @@
   trigger:
   - platform: state
     entity_id:
-    - person.will
-    from: away
+    - group.family
+    from: not_home
     to: home
     for:
       hours: 0
       minutes: 1
       seconds: 0
-  - platform: state
-    entity_id:
-    - person.hannah
-    from: away
-    for:
-      hours: 0
-      minutes: 1
-      seconds: 0
-    to: home
   condition:
   - condition: state
-    entity_id: person.will
-    state: home
-  - condition: state
-    entity_id: person.hannah
+    entity_id: group.family
     state: home
   action:
   - device_id: b12ffd06f62c5c580df9f7742a478f7a
@@ -301,7 +283,14 @@
   - condition: time
     before: 03:00:00
     after: '22:00:00'
-    weekday: []
+    weekday:
+    - sun
+    - sat
+    - fri
+    - thu
+    - wed
+    - tue
+    - mon
   action:
   - service: switch.turn_on
     data: {}
@@ -327,15 +316,23 @@
   - condition: time
     before: '12:00:00'
     after: 05:30:00
+    weekday:
+    - sun
+    - sat
+    - fri
+    - thu
+    - wed
+    - tue
+    - mon
   action:
   - service: input_boolean.turn_off
     data: {}
     target:
       entity_id: input_boolean.bedtime_will
-  - service: switch.turn_off
-    data: {}
-    target:
-      entity_id: switch.bedroom_fan
+  - service: wake_on_lan.send_magic_packet
+    data:
+      mac: c8:f7:50:97:4c:c5
+      broadcast_address: 192.168.3.75
   mode: single
 - id: '1660259453208'
   alias: Test delay
@@ -351,4 +348,63 @@
     data: {}
     target:
       entity_id: switch.bedroom_fan
+  mode: single
+- id: '1660312365349'
+  alias: Living Room Unoccupied
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.living_room_motion
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  condition:
+  - condition: state
+    entity_id: input_boolean.living_room_occupied
+    state: 'on'
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.living_room_occupied
+  mode: single
+- id: '1660602177437'
+  alias: Notify on front camera motion
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.bedroom_camera_motion
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+  condition: []
+  action:
+  - service: notify.mobile_app_pixel_6_pro
+    data:
+      message: Front camera motion detected
+  mode: single
+- id: '1661143135948'
+  alias: Notify on Garage Door Open
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.garage_door_access_control_window_door_is_open
+    from: 'off'
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  condition: []
+  action:
+  - service: notify.mobile_app_pixel_6_pro
+    data:
+      message: Garage Door Is Open
   mode: single

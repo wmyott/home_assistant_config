@@ -11,48 +11,47 @@ sensor:
       - voc
       - pm25
     value_template: 'OK'
-  - platform: template
-    sensors:
-      awair_score:
-        friendly_name: "Quality Score"
-        entity_id: sensor.awair_score
-        unique_id: awair_score
-        value_template: '{{ states.sensor.awair_sensors.attributes["score"] }}'
-        unit_of_measurement: '%'
-      awair_temp:
-        entity_id: sensor.awair_temp
-        unique_id: awair_temp
-        friendly_name: "Temperature"
-        value_template: >-
-          {% set t = states.sensor.awair_sensors.attributes["temp"] | float %}
-          {{ ((t)*9/5)+32 }}
-        device_class: temperature
-        unit_of_measurement: '°F'
-      awair_humidity:
-        entity_id: sensor.awair_humidity
-        unique_id: awair_humidity
-        friendly_name: "Relative Humidity"
-        value_template: '{{ states.sensor.awair_sensors.attributes["humid"] }}'
-        device_class: humidity
-        unit_of_measurement: '%'
-      awair_co2:
-        entity_id: sensor.awair_co2
-        unique_id: awair_co2
-        friendly_name: "Carbon Dioxide"
-        value_template: '{{ states.sensor.awair_sensors.attributes["co2"] }}'
-        unit_of_measurement: 'ppm'
-        device_class: carbon_dioxide
-      awair_voc:
-        entity_id: sensor.awair_voc
-        unique_id: awair_voc
-        friendly_name: "Total VOC"
-        value_template: '{{ states.sensor.awair_sensors.attributes["voc"] }}'
-        unit_of_measurement: 'ppb'
-        device_class: volatile_organic_compounds
-      awair_pm25:
-        entity_id: sensor.awair_pm25
-        unique_id: awair_pm25
-        friendly_name: "Particulate Matter 2.5"
-        value_template: '{{ states.sensor.awair_sensors.attributes["pm25"] }}'
-        unit_of_measurement: 'μg/m³'
-        device_class: pm25
+
+template:
+  - sensor:
+    - name: awair_score
+      unique_id: awair_score
+      state: '{{ states.sensor.awair_sensors.attributes["score"] }}'
+      unit_of_measurement: '%'
+
+    - name: awair_temp
+      unique_id: awair_temp
+      state: >-
+        {% set t = states.sensor.awair_sensors.attributes["temp"] | float %}
+        {{ ((t)*9/5)+32 }}
+      device_class: temperature
+      state_class: measurement
+      unit_of_measurement: '°F'
+
+    - name: awair_humidity
+      unique_id: awair_humidity
+      state: '{{ states.sensor.awair_sensors.attributes["humid"] }}'
+      device_class: humidity
+      state_class: measurement
+      unit_of_measurement: '%'
+
+    - name: awair_co2
+      unique_id: awair_co2
+      state: '{{ states.sensor.awair_sensors.attributes["co2"] }}'
+      unit_of_measurement: 'ppm'
+      device_class: carbon_dioxide
+      state_class: measurement
+
+    - name: awair_voc
+      unique_id: awair_voc
+      state: '{{ states.sensor.awair_sensors.attributes["voc"] }}'
+      unit_of_measurement: 'ppb'
+      device_class: volatile_organic_compounds
+      state_class: measurement
+
+    - name: awair_pm25
+      unique_id: awair_pm25
+      state: '{{ states.sensor.awair_sensors.attributes["pm25"] }}'
+      unit_of_measurement: 'μg/m³'
+      state_class: measurement
+      device_class: pm25

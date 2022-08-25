@@ -4,7 +4,7 @@ automation:
   trigger:
   - type: battery_level
     platform: device
-    device_id: 062f50da56902e7e31c839acfbfcd58e
+    device_id: 9213b78d3e528a36cbe926a3cc21b086
     entity_id: sensor.network_ups_battery_charge
     domain: sensor
     below: 100

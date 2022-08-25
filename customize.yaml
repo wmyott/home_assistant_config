@@ -1,0 +1,5 @@
+sensor.dryer_plug_electric_consumption_kwh:
+  state_class: total
+
+sensor.washer_plug_electric_consumption_kwh:
+  state_class: total

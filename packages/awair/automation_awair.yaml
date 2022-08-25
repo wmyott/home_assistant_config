@@ -4,7 +4,7 @@ automation:
   description: ''
   trigger:
   - platform: numeric_state
-    entity_id: sensor.awair_kitchen_co2
+    entity_id: sensor.awair_co2
     above: '1000'
     for:
       hours: 0
